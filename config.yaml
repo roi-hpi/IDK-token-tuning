@@ -1,0 +1,42 @@
+# Global configs
+
+seed: 42
+
+# Train configs
+train:
+  resume_from_checkpoint: True
+  load_dataset_from_disk: True
+  dataset_dir: "./datasets/wiki/multiberts-wiki"
+  final_model_dir: "./models/idk-bert"
+  test_size: 0.1
+  mlm_probability: 0.15
+  train_idk_model: True
+  # ----IDK weight params----
+  IDK_weight_max: 0.2  # if we choose constant weight then it will be half of this value
+  IDK_weight_schedule: 'constant'  # in ['constant','increasing','decreasing','adaptive']
+  num_expected_steps: 50000  # for idk scheduler
+  correct_pred_reg : True  # if to apply regularization on correct prediction's loss, defaults to False
+  #--------------------------
+  training_args:  # Huggingface TrainingArguments
+    output_dir: "./training/idk-bert"
+    logging_dir: "./logs"
+    logging_steps: 500
+    report_to: "wandb"
+    evaluation_strategy: "steps"
+    eval_steps: 10000
+    save_total_limit: 10
+    load_best_model_at_end: True
+    save_strategy: "steps"
+    save_steps: 10000
+    per_device_train_batch_size: 16
+    per_device_eval_batch_size: 32
+    max_steps: 50000
+
+# Eval configs
+eval:
+  load_results_from_disk: True
+  results_dir: "./results/idk-bert"
+  compare_to_baseline: True
+  baseline_results_dir: "./results/idk-bert-no-idk"
+  batch_size: 256
+  scale_factors: [0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2]

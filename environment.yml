@@ -1,0 +1,73 @@
+name: nordwind
+channels:
+  - nvidia # nvidia channel for cuda packages
+  # - pytorch-nightly # pytorch-nightly for latest pytorch
+  - conda-forge
+  # We want to have a reproducible setup, so we don't want default channels,
+  # which may be different for different users. All required channels should
+  # be listed explicitly here.
+  - nodefaults
+dependencies:
+  - python=3.11 # or don't specify the version and use latest stable
+  - pytorch-nightly::pytorch>=2.0 # or don't specify the version and use latest stable
+  # CUDA only on linux and windows
+  - pytorch-nightly::pytorch-cuda=11.8 # [linux]
+  - wandb
+  - transformers
+  - tokenizers
+  - accelerate
+  - datasets
+  - evaluate
+  - optimum
+
+  # - lightning
+  # - lightning-utilities
+
+  - scipy
+  - numpy
+
+  - loguru
+  - tqdm
+  - jsonargparse
+  - zstandard
+  - sentencepiece
+  - pandas
+  - jsonlines
+
+  - fasttext
+  # For fastdist
+  - numba
+  
+  # Safety
+  - scikit-learn
+  - seqeval
+
+  # To build flash-attn
+  - ninja
+
+  # Dev dependencies
+  - black
+  - ruff
+  - debugpy
+
+  # color printing
+  - rich
+
+  # pip dependencies
+  - pip
+  - pip:
+    - bitsandbytes
+    - fastdist
+    - simple_parsing
+    - print-on-steroids[exceptions]
+    - pipx
+    # - deepfocus
+    # - wechsel
+    # - entmax
+  # Install seperately - doesn't work with conda-lock
+  #   - git+https://github.com/Lightning-AI/lightning.git@master
+
+# Non-standard section listing target platforms for conda-lock:
+platforms:
+  - linux-64
+  # - osx-arm64 # This is for M1/M2 MacBooks
