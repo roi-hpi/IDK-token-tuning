@@ -1,0 +1,39 @@
+base_unit: optimizer-steps
+training_goal: 1024
+log_interval: -1
+eval_interval: 0.05
+eval_samples: 10_000
+cross_tokenizer_val: True
+save_interval: 0.05
+warmup_period: 0.05 
+block_size: 2048 # match pythia pretraining
+batch_size: 256 # maybe => 1024 to match pythia pretraining?
+weight_decay: 0.05
+learning_rate: 4e-5 # increased from 2e-5 in LeoLM previously
+decay_lr: True # cosine decay
+min_lr: 2e-6
+beta1: 0.9
+beta2: 0.95
+grad_clip: 1.0
+seed: 42
+
+train_embeddings: True
+model_path: EleutherAI/pythia-160M
+tokenizer_path: tokenizers/pythia-idk
+out_dir: out/
+model_profiling: True
+model_profiling_interval: 10
+
+# Efficiency settings
+micro_batch_size: 1
+fast_model_loading: True
+precision: bf16-true
+use_anyprecision_adamw: False
+activation_checkpointing: False
+fsdp_sharding_strategy: "NO_SHARD"
+fsdp_limit_all_gathers: False
+fsdp_cpu_offload: False
+compile: True
+use_additional_flash_attn_kernels: False # RMSNorm kernels lead to graph breaks with `torch.compile` => slower than not using them, yes but mistral needs FA2 from pypi, which doesn't work w/ compile
+adamw_foreach: True
+workers: 4
